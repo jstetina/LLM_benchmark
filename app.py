@@ -224,7 +224,6 @@ with (gr.Blocks(theme=gr.themes.Soft(text_size=text_md), css="footer {visibility
                     submissions_24h_txt = gr.Textbox(label='Submissions 24h', value='')
                 description_tb = gr.Textbox(label='Description', type='text')
                 submission_btn = gr.Button(value='Submit', interactive=True)
-                gr.Markdown('### * Please make sure you are using NOTSOFAR dev-set-2 for your submissions')
 
                 submission_btn.click(
                     fn=on_submit_pressed,
