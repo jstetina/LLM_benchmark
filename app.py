@@ -36,6 +36,7 @@ def greet(name: str) -> str:
 
 DATASET_VERSIONS = ['dev-set-1', 'dev-set-2']
 
+HF_TOKEN = os.environ.get("HF_TOKEN")
 
 
 
@@ -43,10 +44,10 @@ class LeaderboardServer:
     def __init__(self, server_address):
         self.server_address = server_address
         self.repo_type = "dataset"
-        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type)
+        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN)
 
     def on_submit(self):
-        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type)
+        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN)
 
     def get_leaderboard(self):
         results = []
@@ -65,7 +66,8 @@ class LeaderboardServer:
             path_or_fileobj=file,
             path_in_repo=f"data/{filename}",
             repo_id=self.server_address,
-            repo_type=self.repo_type
+            repo_type=self.repo_type,
+            token=HF_TOKEN,
         )
 
 
