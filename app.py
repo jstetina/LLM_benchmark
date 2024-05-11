@@ -44,14 +44,14 @@ class LeaderboardServer:
     def __init__(self, server_address):
         self.server_address = server_address
         self.repo_type = "dataset"
-        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN)
+        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN,local_dir = "/content")
         print(self.local_leaderboard)
     def on_submit(self):
-        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN)
+        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN,local_dir = "/content")
 
     def get_leaderboard(self):
         results = []
-        for submission in glob.glob(os.path.join(self.local_leaderboard, "/data") + "/*.json"):
+        for submission in glob.glob(os.path.join(self.local_leaderboard, "data") + "/*.json"):
             data = json.load(open(submission))
             submission_id = data["metadata"]["model_description"]
             local_results = {group: data["results"][group]['acc'] for group in data['results']}
@@ -60,11 +60,11 @@ class LeaderboardServer:
         dataframe = pd.DataFrame.from_records(results)
         return dataframe
 
-    def save_json(self,file) -> None:
+    def save_json(self,file, submission_name) -> None:
         filename = os.path.basename(file)
         api.upload_file(
             path_or_fileobj=file,
-            path_in_repo=f"data/{filename}",
+            path_in_repo=f"data/{submission_name}_{filename}",
             repo_id=self.server_address,
             repo_type=self.repo_type,
             token=HF_TOKEN,
@@ -84,6 +84,7 @@ MAX_SUBMISSIONS_PER_24H = 2
 # CHALLENGE_NAME = 'NOTSOFAR1'
 
 
+# if __name__ == '__main__':
 with (gr.Blocks(theme=gr.themes.Soft(text_size=text_md), css="footer {visibility: hidden}") as main):
     app_state = gr.State({})
     # with gr.Row():
@@ -195,7 +196,7 @@ with (gr.Blocks(theme=gr.themes.Soft(text_size=text_md), css="footer {visibility
                     #             'file_name': os.path.basename(submission_zip),
                     #             'file_size_mb': os.path.getsize(submission_zip) / 1024 / 1024,
                     #             'ip': request.client.host}
-                    leaderboard_server.save_json(submission)
+                    leaderboard_server.save_json(team_name,submission)
 
                     try:
                         gr.Info('Processing submission...')
