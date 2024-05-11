@@ -198,7 +198,7 @@ with (gr.Blocks(theme=gr.themes.Soft(text_size=text_md), css="footer {visibility
                     #             'file_name': os.path.basename(submission_zip),
                     #             'file_size_mb': os.path.getsize(submission_zip) / 1024 / 1024,
                     #             'ip': request.client.host}
-                    leaderboard_server.save_json(team_name,submission)
+                    leaderboard_server.save_json(submission,team_name)
 
                     try:
                         gr.Info('Processing submission...')
