@@ -1,0 +1,7 @@
+gradio
+pandas
+azure-cosmos
+huggingface_hub
+requests
+Pyarrow
+tabulate
