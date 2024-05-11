@@ -45,13 +45,13 @@ class LeaderboardServer:
         self.server_address = server_address
         self.repo_type = "dataset"
         self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN)
-
+        print(self.local_leaderboard)
     def on_submit(self):
         self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN)
 
     def get_leaderboard(self):
         results = []
-        for submission in glob.glob(os.path.join(self.local_leaderboard, "../data") + "/*.json"):
+        for submission in glob.glob(os.path.join(self.local_leaderboard, "/data") + "/*.json"):
             data = json.load(open(submission))
             submission_id = data["metadata"]["model_description"]
             local_results = {group: data["results"][group]['acc'] for group in data['results']}
