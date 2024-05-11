@@ -44,13 +44,14 @@ class LeaderboardServer:
     def __init__(self, server_address):
         self.server_address = server_address
         self.repo_type = "dataset"
-        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN,local_dir = "/content")
+        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN,local_dir = "./")
         print(self.local_leaderboard)
     def on_submit(self):
-        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN,local_dir = "/content")
+        self.local_leaderboard = snapshot_download(self.server_address,repo_type=self.repo_type, token=HF_TOKEN,local_dir = "./")
 
     def get_leaderboard(self):
         results = []
+        print(os.listdir(self.local_leaderboard))
         for submission in glob.glob(os.path.join(self.local_leaderboard, "data") + "/*.json"):
             data = json.load(open(submission))
             submission_id = data["metadata"]["model_description"]
@@ -69,6 +70,7 @@ class LeaderboardServer:
             repo_type=self.repo_type,
             token=HF_TOKEN,
         )
+
 
 
 
