@@ -27,8 +27,7 @@ JSON_DATASET_PATH = JSON_DATASET_DIR / f"train-{uuid4()}.json"
 
 api = HfApi()
 
-ORG= "CZLC"
-REPO = f"{ORG}/LLM_benchmark_data"
+REPO = f"LLM_benchmark_data"
 
 def greet(name: str) -> str:
     return "Hello " + name + "!"
